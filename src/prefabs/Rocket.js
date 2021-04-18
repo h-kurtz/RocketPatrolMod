@@ -6,6 +6,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		// add object to existing scene
 		scene.add.existing(this); // <- references scene
         this.isFiring = false;  // track rocket firing status
+		this.isMissed = false;
 
 		this.moveSpeedX = 0;
 		this.moveSpeedY = 0;
@@ -27,7 +28,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		}
 
 		// fire button, setup thrust phase
-		if(Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
+		if(Phaser.Input.Keyboard.JustDown(keyUP) && !this.isFiring) {
 			this.isFiring = true;
 			this.isThrust = true;
 			this.moveSpeedY = this.initialThrust; // add initial thrust
@@ -48,28 +49,21 @@ class Rocket extends Phaser.GameObjects.Sprite {
 			}
 
 			// If they let go, or reach the apex of their arc, they can no longer thrust
-			if (Phaser.Input.Keyboard.JustUp(keyF) && this.isThrust ||this.moveSpeedY > 0) {
+			if (Phaser.Input.Keyboard.JustUp(keyUP) && this.isThrust ||this.moveSpeedY > 0) {
 				this.isThrust = false;
-			} else if (keyF.isDown && this.isThrust) {
+			} else if (keyUP.isDown && this.isThrust) {
 				this.moveSpeedY += this.thrustSpeed;
 			}
 			this.moveSpeedY += this.gravity;
 			this.y += this.moveSpeedY;
 
 		}
-		// reset on miss, if it touches the ground or the sky
-		if (this.y <= borderUISize || this.y >= game.config.height - borderUISize - borderPadding) {
-			this.reset();
-		}
     }
-
-	missed() {
-
-	}
 
 	// reset rocket to "ground"
 	reset() {
 		this.isFiring = false;
+		this.isMissed = false;
 		this.moveSpeedX = 0;
 		this.y = game.config.height - borderUISize - borderPadding - this.player.height;
 	}

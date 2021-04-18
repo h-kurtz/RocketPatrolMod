@@ -32,7 +32,9 @@ class Player extends Phaser.GameObjects.Sprite {
         // update position based on speed if over a threshold
 		if (this.moveSpeedX >= this.minSpeed || this.moveSpeedX <= -this.minSpeed) {
 			this.x += this.moveSpeedX;
-		}
+		} else {
+            this.moveSpeedX = 0;
+        }
 
         // update position based on speed if over a threshold
 		if (this.moveSpeedX >= this.minSpeed || this.moveSpeedX <= -this.minSpeed) {

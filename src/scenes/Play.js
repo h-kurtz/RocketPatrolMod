@@ -41,7 +41,7 @@ class Play extends Phaser.Scene{
         this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0, 0);
 
         //define keys
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -82,7 +82,7 @@ class Play extends Phaser.Scene{
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, ()=> {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ᐊ for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
 
@@ -109,7 +109,6 @@ class Play extends Phaser.Scene{
         if (!this.gameOver) {
             this.p1.update();
             this.p1Rocket.update();
-
             //update spaceships (x3)
             this.ship01.update();
             this.ship02.update();
@@ -118,28 +117,38 @@ class Play extends Phaser.Scene{
             this.timerRight.text = this.timerSeconds - Math.round((this.time.now - this.timeStart) / 1000)
         }
 
+
+
         // check collisions
         if (this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship03);
         }
-        if (this.checkCollision(this.p1Rocket, this.ship02)) {
+        else if (this.checkCollision(this.p1Rocket, this.ship02)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship02);
         }
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
+        else if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
+        // "catch" the rocket with the ship
+        else if (this.checkCollision(this.p1, this.p1Rocket)){
+            this.p1Rocket.reset();
+        }
 
+        // call miss timer, if it touches the ground or the sky
+		if ((this.p1Rocket.y <= borderUISize || this.p1Rocket.y >= game.config.height - borderUISize - borderPadding) && !this.p1Rocket.isMissed) {
+			this.rocketMissed(this.p1Rocket);
+		}
     }
 
-    checkCollision(rocket, ship) {
+    checkCollision(a, b) {
         // simple AABB checking
-        if (rocket.x < ship.x + ship.width &&
-            rocket.x + rocket.width > ship.x &&
-            rocket.y < ship.y + ship.height &&
-            rocket.height + rocket.y > ship.y) {
+        if (a.x < b.x + b.width &&
+            a.x + a.width > b.x &&
+            a.y < b.y + b.height &&
+            a.height + a.y > b.y) {
                 return true;
             } else {
                 return false;
@@ -161,5 +170,10 @@ class Play extends Phaser.Scene{
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
         this.sound.play('sfx_explosion');
+    }
+
+    rocketMissed(rocket) {
+        rocket.isMissed = true;
+        this.time.delayedCall(game.settings.missTimer, ()=> rocket.reset(), null, this);
     }
 }
