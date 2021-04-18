@@ -12,19 +12,30 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.acceleration = 0.1;	// acceleration;
 		this.friction = 0.075;
 
+        // initialize score
+        this.score = 0;
+
         this.sfxRocket = scene.sound.add('sfx_rocket'); // add rocket sfx
 	}
+    create(keyLEFT, keyRIGHT, scoreboard) {
+        this.keyLEFT = keyLEFT;
+        this.keyRIGHT = keyRIGHT;
+        this.scoreboard = scoreboard;
+    }
 
     update() {
 	    // left/right movement with acceleration
-        if(keyLEFT.isDown && this.x >= borderUISize - this.width && this.moveSpeedX > -this.maxSpeed) {
+        if(this.keyLEFT.isDown && this.x >= borderUISize - this.width && this.moveSpeedX > -this.maxSpeed) {
             this.moveSpeedX -= this.acceleration;
-        } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize && this.moveSpeedX < this.maxSpeed) {
+        } 
+        else if (this.keyRIGHT.isDown && this.x <= game.config.width - borderUISize && this.moveSpeedX < this.maxSpeed) {
             this.moveSpeedX += this.acceleration;
-        } else { // reduce speed with friction if not moving
+        } 
+        else { // reduce speed with friction if not moving
             if (this.moveSpeedX > 0) {
                 this.moveSpeedX -= this.friction;
-            } else if (this.moveSpeedX < 0) {
+            } 
+            else if (this.moveSpeedX < 0) {
                 this.moveSpeedX += this.friction;
             }
         }

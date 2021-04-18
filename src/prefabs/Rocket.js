@@ -7,10 +7,11 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		scene.add.existing(this); // <- references scene
         this.isFiring = false;  // track rocket firing status
 		this.isMissed = false;
+		this.isThrust = false;
 
+		// initialize movement and acceleration variables
 		this.moveSpeedX = 0;
 		this.moveSpeedY = 0;
-		this.isThrust = false;
 		this.initialThrust = -8;
 		this.thrustSpeed = -0.11;
 		this.gravity = 0.15;
@@ -18,8 +19,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		this.sfxRocket = scene.sound.add('sfx_rocket'); // add rocket sfx
 	}
 
-	create(playerParent) {
+	create(playerParent, keyUP) {
 		this.player = playerParent;
+		// set controls
+		this.keyUP = keyUP;
 	}
 
     update() {
@@ -28,7 +31,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		}
 
 		// fire button, setup thrust phase
-		if(Phaser.Input.Keyboard.JustDown(keyUP) && !this.isFiring) {
+		if(Phaser.Input.Keyboard.JustDown(this.keyUP) && !this.isFiring) {
 			this.isFiring = true;
 			this.isThrust = true;
 			this.moveSpeedY = this.initialThrust; // add initial thrust
@@ -49,9 +52,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
 			}
 
 			// If they let go, or reach the apex of their arc, they can no longer thrust
-			if (Phaser.Input.Keyboard.JustUp(keyUP) && this.isThrust ||this.moveSpeedY > 0) {
+			if (Phaser.Input.Keyboard.JustUp(this.keyUP) && this.isThrust ||this.moveSpeedY > 0) {
 				this.isThrust = false;
-			} else if (keyUP.isDown && this.isThrust) {
+			} else if (this.keyUP.isDown && this.isThrust) {
 				this.moveSpeedY += this.thrustSpeed;
 			}
 			this.moveSpeedY += this.gravity;
