@@ -24,6 +24,7 @@ Create and implement a new weapon:              20pts
     * Player can "catch" the hat/rocket to
       get it back instantly, or miss and have
       to wait a short amount of time.
+Total:                                          100pts
 */
 
 // game configuration
