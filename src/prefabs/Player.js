@@ -1,6 +1,6 @@
 // Player (ship) prefab
 class Player extends Phaser.GameObjects.Sprite {
-	constructor(scene, x, y, texture, frame) {
+	constructor(scene, x, y, texture, frame, keyLEFT, keyRIGHT, scoreboard) {
 		super(scene, x, y, texture, frame);
 
         // add object to existing scene
@@ -12,16 +12,16 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.acceleration = 0.1;	// acceleration;
 		this.friction = 0.075;
 
+        // setup controls
+        this.keyLEFT = keyLEFT;
+        this.keyRIGHT = keyRIGHT;
+
         // initialize score
         this.score = 0;
+        this.scoreboard = scoreboard;
 
         this.sfxRocket = scene.sound.add('sfx_rocket'); // add rocket sfx
 	}
-    create(keyLEFT, keyRIGHT, scoreboard) {
-        this.keyLEFT = keyLEFT;
-        this.keyRIGHT = keyRIGHT;
-        this.scoreboard = scoreboard;
-    }
 
     update() {
 	    // left/right movement with acceleration

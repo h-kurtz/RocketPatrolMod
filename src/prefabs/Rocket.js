@@ -1,6 +1,6 @@
 // Rocket prefab
 class Rocket extends Phaser.GameObjects.Sprite {
-	constructor(scene, x, y, texture, frame) {
+	constructor(scene, x, y, texture, frame, playerParent, keyUP, inverted) {
 		super(scene, x, y, texture, frame);
 
 		// add object to existing scene
@@ -14,15 +14,21 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		this.moveSpeedY = 0;
 		this.initialThrust = -8;
 		this.thrustSpeed = -0.11;
-		this.gravity = 0.15;
+		this.gravity = 0.18;
 
-		this.sfxRocket = scene.sound.add('sfx_rocket'); // add rocket sfx
-	}
-
-	create(playerParent, keyUP) {
 		this.player = playerParent;
+
 		// set controls
 		this.keyUP = keyUP;
+
+		this.inverted = inverted;
+		if (inverted) {
+            this.invert = -1;
+        } else {
+			this.invert = 1;
+		}
+
+		this.sfxRocket = scene.sound.add('sfx_rocket'); // add rocket sfx
 	}
 
     update() {
@@ -34,7 +40,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		if(Phaser.Input.Keyboard.JustDown(this.keyUP) && !this.isFiring) {
 			this.isFiring = true;
 			this.isThrust = true;
-			this.moveSpeedY = this.initialThrust; // add initial thrust
+			this.moveSpeedY = this.initialThrust * this.invert; // add initial thrust
 			this.moveSpeedX = this.player.moveSpeedX;
 			this.sfxRocket.play(); // play sfx
 		}
@@ -52,14 +58,13 @@ class Rocket extends Phaser.GameObjects.Sprite {
 			}
 
 			// If they let go, or reach the apex of their arc, they can no longer thrust
-			if (Phaser.Input.Keyboard.JustUp(this.keyUP) && this.isThrust ||this.moveSpeedY > 0) {
+			if (Phaser.Input.Keyboard.JustUp(this.keyUP) && this.isThrust ||((this.moveSpeedY > 0 && !this.inverted) || (this.moveSpeedY < 0 && this.inverted))) {
 				this.isThrust = false;
 			} else if (this.keyUP.isDown && this.isThrust) {
-				this.moveSpeedY += this.thrustSpeed;
+				this.moveSpeedY += this.thrustSpeed * this.invert;
 			}
-			this.moveSpeedY += this.gravity;
+			this.moveSpeedY += this.gravity * this.invert;
 			this.y += this.moveSpeedY;
-
 		}
     }
 
@@ -68,6 +73,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		this.isFiring = false;
 		this.isMissed = false;
 		this.moveSpeedX = 0;
-		this.y = game.config.height - borderUISize - borderPadding - this.player.height;
+		if (this.inverted) {
+			this.y = borderPadding + borderUISize + this.player.height;
+		} else {
+			this.y = game.config.height - borderUISize - borderPadding - this.player.height;
+		}
 	}
 }
