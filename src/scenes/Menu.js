@@ -12,7 +12,7 @@ class Menu extends Phaser.Scene{
         // display score
         let menuConfig = {
             fontFamily: 'Courier',
-            fontSizse: '28px',
+            fontSize: '64px',
             backgroundColor: '#F3B141',
             color: '#843605',
             align: 'right',
@@ -23,9 +23,10 @@ class Menu extends Phaser.Scene{
             fixedWidth: 0
         }
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - (borderUISize * 2), 'HAT PATROL', menuConfig).setOrigin(0.5);
+        menuConfig.fontSize = '28px';
         this.add.text(game.config.width/2, game.config.height/2, 'Use ᐊ ᐅ arrows to move & ᐃ to fire', menuConfig).setOrigin(0.5);
-        menuConfig.backgroundColor = '#00FF00';
+        menuConfig.backgroundColor = '#A080EC';
         menuConfig.color = '#000';
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ᐊ for Novice or ᐅ for Expert', menuConfig).setOrigin(0.5);
 
@@ -41,7 +42,7 @@ class Menu extends Phaser.Scene{
             // easy mode
             game.settings = {
                 spaceshipMaxSpeed: 5,
-                spaceshipAmount: 7,
+                spaceshipAmount: 5,
                 gameTimer: 60000,
                 missTimer: 3000
             }

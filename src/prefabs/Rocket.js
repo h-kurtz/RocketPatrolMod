@@ -53,10 +53,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
 			this.x += this.moveSpeedX
 
 			// wrap around
-			if(this.x <= borderPadding && this.moveSpeedX < 0) {
-				this.x = game.config.width - borderUISize ;
-			} else if (this.x >= game.config.width - borderUISize && this.moveSpeedX > 0) {
-				this.x = borderUISize-this.width;
+			if(this.x <= 0 - (this.width / 2) && this.moveSpeedX < 0) {
+				this.x = game.config.width + (this.width / 2);
+			} else if (this.x >= game.config.width + (this.width / 2) && this.moveSpeedX > 0) {
+				this.x = 0 - (this.width / 2);
 			}
 
 			// If they let go, or reach the apex of their arc, they can no longer thrust

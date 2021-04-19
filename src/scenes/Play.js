@@ -5,9 +5,13 @@ class Play extends Phaser.Scene{
 
     preload() {
         // load images and sprites
-        this.load.image('rocket', './assets/rocket.png');
-        this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('hat', './assets/hat.png');
+        this.load.image('player', './assets/man.png');
+        this.load.image('bottle', './assets/bottle.png');
+        this.load.image('bg1', './assets/bg1.png');
+        this.load.image('bg2', './assets/bg2.png');
+        this.load.image('streetlamps', './assets/streetlamps.png');
+        this.load.image('road', './assets/road.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {
             frameWidth: 64,
@@ -18,26 +22,39 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-    	// place starfield
-    	this.bgLayer1 = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'starfield').setOrigin(0, 0);
-        this.bgLayer2 = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'starfield').setOrigin(0, 0);
+        // red bg
+        this.add.rectangle(0, 0, game.config.width, game.config.height, 0x7860B1).setOrigin(0, 0);
+
+        // place background
+    	this.bgLayer2 = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg2').setOrigin(0, 0);
+        this.bgLayer1 = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg1').setOrigin(0, 0);
+        this.bgLamps = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'streetlamps').setOrigin(0, 0);
+        this.bgRoad = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'road').setOrigin(0, 0);
+
+        this.bgLayer2b = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg2').setOrigin(0, 0);
+        this.bgLayer1b = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg1').setOrigin(0, 0);
+        this.bgLampsb = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'streetlamps').setOrigin(0, 0);
+        this.bgRoadb = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'road').setOrigin(0, 0);
+
+        this.bgLayer2b.flipY = true;
+        this.bgLayer1b.flipY = true;
+        this.bgLampsb.flipY = true;
+        this.bgRoadb.flipY = true;
 
         // green border
         //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
 
-        // white borders
-        this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
+        //this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
+        //this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
+        //this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
  
         // display score
         let scoreConfig = {
             fontFamily: 'Courier',
-            fontSizse: '28px',
+            fontSizse: '32px',
             backgroundColor: '#F3B141',
             color: '#843605',
-            align: 'right',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
@@ -63,12 +80,12 @@ class Play extends Phaser.Scene{
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         // instantiate Player1 class
-        this.p1 = new Player(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket', 0, keyLEFT1, keyRIGHT1, this.p1Scoreboard).setOrigin(0.5, 0);
-        this.p1Rocket = new Rocket(this, game.config.width/3, game.config.height - borderUISize - borderPadding - this.p1.height, 'rocket', 0, this.p1, keyUP1, false).setOrigin(0.5, 0);
+        this.p1 = new Player(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'player', 0, keyLEFT1, keyRIGHT1, this.p1Scoreboard).setOrigin(0.5, 1);
+        this.p1Rocket = new Rocket(this, game.config.width/3, game.config.height - borderUISize - borderPadding - this.p1.height, 'hat', 0, this.p1, keyUP1, false).setOrigin(0.5, 1);
 
         // instantiate Player2 class
-        this.p2 = new Player(this, game.config.width/2, borderUISize + borderPadding, 'rocket', 0, keyLEFT2, keyRIGHT2, this.p2Scoreboard).setOrigin(0.5, 1);
-        this.p2Rocket = new Rocket(this, game.config.width/2, borderUISize + borderPadding + this.p1.height, 'rocket', 0, this.p2, keyUP2, true).setOrigin(0.5, 1);
+        this.p2 = new Player(this, game.config.width/2, borderUISize + borderPadding, 'player', 0, keyLEFT2, keyRIGHT2, this.p2Scoreboard).setOrigin(0.5, 0);
+        this.p2Rocket = new Rocket(this, game.config.width/2, borderUISize + borderPadding + this.p1.height, 'hat', 0, this.p2, keyUP2, true).setOrigin(0.5, 0);
 
         // add spaceship (x3)
         /*
@@ -80,8 +97,8 @@ class Play extends Phaser.Scene{
 
         this.spaceships = [game.settings.spaceshipAmount];
         for (let i = 0; i < game.settings.spaceshipAmount; i++) {
-            this.spaceships[i] = new Spaceship(this, game.config.width, game.config.height/2 + (borderPadding * (((2 * (i % 2)) - 1) * (i + 1))), 
-            'spaceship', 0, 30).setOrigin(0, 0);
+            this.spaceships[i] = new Spaceship(this, game.config.width, game.config.height/2 + (borderPadding * (((2 * (i % 2)) - 1) * (i * 2))), 
+            'bottle', 0, 30).setOrigin(0, 0);
         }
 
         // animation config
@@ -124,10 +141,17 @@ class Play extends Phaser.Scene{
             this.scene.start('menuScene');
         }
 
-        this.bgLayer1.tilePositionX -= starSpeed;
-        this.bgLayer2.tilePositionX -= starSpeed * 0.8;
-
         if (!this.gameOver) {
+            this.bgRoad.tilePositionX  -= bgSpeed;
+            this.bgLamps.tilePositionX  -= bgSpeed * 0.8;
+            this.bgLayer1.tilePositionX -= bgSpeed * 0.6;
+            this.bgLayer2.tilePositionX -= bgSpeed * 0.4;
+    
+            this.bgRoadb.tilePositionX  += bgSpeed;
+            this.bgLampsb.tilePositionX  += bgSpeed * 0.8;
+            this.bgLayer1b.tilePositionX += bgSpeed * 0.6;
+            this.bgLayer2b.tilePositionX += bgSpeed * 0.4;
+
             this.p1.update();
             this.p1Rocket.update();
             this.p2.update();

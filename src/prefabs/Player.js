@@ -25,10 +25,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update() {
 	    // left/right movement with acceleration
-        if(this.keyLEFT.isDown && this.x >= borderUISize - this.width && this.moveSpeedX > -this.maxSpeed) {
+        if(this.keyLEFT.isDown && this.x >= 0 - this.width / 2 && this.moveSpeedX > -this.maxSpeed) {
             this.moveSpeedX -= this.acceleration;
         } 
-        else if (this.keyRIGHT.isDown && this.x <= game.config.width - borderUISize && this.moveSpeedX < this.maxSpeed) {
+        else if (this.keyRIGHT.isDown && this.x <= game.config.width + this.width / 2 && this.moveSpeedX < this.maxSpeed) {
             this.moveSpeedX += this.acceleration;
         } 
         else { // reduce speed with friction if not moving
@@ -53,10 +53,10 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		// wrap around
-        if(this.x <= borderPadding && this.moveSpeedX < 0) {
-            this.x = game.config.width - borderUISize ;
-        } else if (this.x >= game.config.width - borderUISize && this.moveSpeedX > 0) {
-			this.x = borderUISize-this.width;
+        if(this.x <= 0 - this.width / 2 && this.moveSpeedX < 0) {
+            this.x = game.config.width + this.width / 2;
+        } else if (this.x >= game.config.width + this.width / 2 && this.moveSpeedX > 0) {
+			this.x = 0 - this.width / 2;
 		}
     }
 }
