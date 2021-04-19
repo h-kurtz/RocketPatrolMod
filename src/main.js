@@ -3,7 +3,7 @@ Harrison Kurtz
 1685929
 Hat Patrol
 April 19, 2021
-8hrs
+10hrs
 
 SCORE BREAKDOWN:
 Simultaneous two-player gameplay:               30pts
