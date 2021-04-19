@@ -112,6 +112,9 @@ class Play extends Phaser.Scene{
             frameRate: 30
         });
 
+        this.song = this.sound.add('music', {volume: 0.5, loop: true});
+        this.song.play();
+
         // GAME OVER flag
         this.gameOver = false;
 
@@ -120,6 +123,7 @@ class Play extends Phaser.Scene{
         this.clock = this.time.delayedCall(game.settings.gameTimer, ()=> {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ᐊ for Menu', scoreConfig).setOrigin(0.5);
+            this.song.stop();
             this.gameOver = true;
         }, null, this);
 
@@ -133,11 +137,11 @@ class Play extends Phaser.Scene{
     update() {
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.sound.play('sfx_select');
+            this.sound.play('sfx_select', {volume:0.5});
             this.scene.restart();
         }
         if (this.gameOver && (Phaser.Input.Keyboard.JustDown(keyLEFT1) || Phaser.Input.Keyboard.JustDown(keyLEFT2))) {
-            this.sound.play('sfx_select');
+            this.sound.play('sfx_select', {volume:0.5});
             this.scene.start('menuScene');
         }
 
@@ -170,7 +174,7 @@ class Play extends Phaser.Scene{
         if(this.checkCollision(this.p1Rocket, this.p2Rocket)) {
             this.p1Rocket.reset();
             this.p2Rocket.reset();
-            this.sound.play('sfx_explosion');
+            this.sound.play('sfx_explosion', {volume:0.5});
         }
 
         this.checkMiss(this.p1Rocket);
@@ -223,12 +227,13 @@ class Play extends Phaser.Scene{
         // score add and repaint
         rocket.player.score += ship.points;
         rocket.player.scoreboard.text = rocket.player.score;
-        this.sound.play('sfx_explosion');
+        this.sound.play('sfx_explosion', {volume:0.5});
     }
 
 
     rocketMissed(rocket) {
         rocket.isMissed = true;
         this.time.delayedCall(game.settings.missTimer, ()=> rocket.reset(), null, this);
+        this.sound.play('sfx_miss', {volume:0.25})
     }
 }

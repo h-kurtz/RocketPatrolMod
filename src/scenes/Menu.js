@@ -6,6 +6,8 @@ class Menu extends Phaser.Scene{
         this.load.audio('sfx_select', './assets/sfx_select.wav');
         this.load.audio('sfx_explosion', './assets/sfx_explosion.wav');
         this.load.audio('sfx_rocket', './assets/sfx_rocket.wav');
+        this.load.audio('sfx_miss', './assets/miss.wav');
+        this.load.audio('music', './assets/music.mp3');
     }
 
     create() {
@@ -24,11 +26,12 @@ class Menu extends Phaser.Scene{
         }
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2 - (borderUISize * 2), 'HAT PATROL', menuConfig).setOrigin(0.5);
-        menuConfig.fontSize = '28px';
-        this.add.text(game.config.width/2, game.config.height/2, 'Use ᐊ ᐅ arrows to move & ᐃ to fire', menuConfig).setOrigin(0.5);
+        menuConfig.fontSize = '20px';
+        this.add.text(game.config.width/2, game.config.height/2, 'Player 1: use A & D to move & W to fire', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Player 2: use ᐊ ᐅ arrows to move & ᐃ to fire', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#A080EC';
         menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ᐊ for Novice or ᐅ for Expert', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 2 + borderPadding * 2, 'Press ᐊ for Novice or ᐅ for Expert', menuConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
