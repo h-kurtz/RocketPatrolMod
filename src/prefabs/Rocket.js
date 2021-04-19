@@ -24,6 +24,8 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		this.inverted = inverted;
 		if (inverted) {
             this.invert = -1;
+			this.flipY = true;
+			this.player.flipY = true;
         } else {
 			this.invert = 1;
 		}
