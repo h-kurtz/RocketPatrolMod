@@ -30,7 +30,20 @@ class Rocket extends Phaser.GameObjects.Sprite {
 			this.invert = 1;
 		}
 
-		this.sfxRocket = scene.sound.add('sfx_rocket', {volume:0.25}); // add rocket sfx
+		this.sfxRocket = scene.sound.add('sfx_rocket', {volume:0.25, rate: 1.05}); // add rocket sfx
+		this.sfxCatch = scene.sound.add('sfx_catch', {volume: 0.25});
+
+		// animation config
+        this.anims.create({
+            key: 'hatCreate',
+            frames: this.anims.generateFrameNumbers('hatAnim', {
+                start: 0,
+                end: 3,
+                first: 0
+            }),
+            frameRate: 10
+        });
+
 	}
 
     update() {
@@ -62,6 +75,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
 			// If they let go, or reach the apex of their arc, they can no longer thrust
 			if (Phaser.Input.Keyboard.JustUp(this.keyUP) && this.isThrust ||((this.moveSpeedY > 0 && !this.inverted) || (this.moveSpeedY < 0 && this.inverted))) {
 				this.isThrust = false;
+				//this.sfxRocket.stop();
 			} else if (this.keyUP.isDown && this.isThrust) {
 				this.moveSpeedY += this.thrustSpeed * this.invert;
 			}
@@ -71,7 +85,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
     }
 
 	// reset rocket to "ground"
-	reset() {
+	reset(playAnim, playCatch) {
 		this.isFiring = false;
 		this.isMissed = false;
 		this.moveSpeedX = 0;
@@ -79,6 +93,12 @@ class Rocket extends Phaser.GameObjects.Sprite {
 			this.y = borderPadding + borderUISize + this.player.height - 8;
 		} else {
 			this.y = game.config.height - borderUISize - borderPadding - this.player.height + 8;
+		}
+		if(playAnim) {
+			this.anims.play('hatCreate');
+		} 
+		if (playCatch) {
+			this.sfxCatch.play();
 		}
 		this.x = this.player.x;
 	}

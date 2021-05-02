@@ -7,6 +7,8 @@ class Menu extends Phaser.Scene{
         this.load.audio('sfx_explosion', './assets/sfx_explosion.wav');
         this.load.audio('sfx_rocket', './assets/sfx_rocket.wav');
         this.load.audio('sfx_miss', './assets/miss.wav');
+        this.load.audio('sfx_catch', './assets/sfx_catch.wav');
+        this.load.audio('sfx_over', './assets/sfx_over.wav')
         this.load.audio('music', './assets/music.mp3');
     }
 
@@ -27,21 +29,24 @@ class Menu extends Phaser.Scene{
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2 - (borderUISize * 2), 'HAT PATROL', menuConfig).setOrigin(0.5);
         menuConfig.fontSize = '20px';
-        this.add.text(game.config.width/2, game.config.height/2, 'Player 1: use A & D to move & W to fire', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Player 2: use ᐊ ᐅ arrows to move & ᐃ to fire', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 'Player 1: use A & D to move & W to launch', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize, 'Player 2: use ᐊ ᐅ arrows to move & ᐃ to launch', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 2 + borderPadding, 'Hold to launch higher!', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#A080EC';
         menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 2 + borderPadding * 2, 'Press ᐊ for Novice or ᐅ for Expert', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 2, 'Press W or ᐃ to begin...', menuConfig).setOrigin(0.5);
 
         // define keys
+        keyUP1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyLEFT1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyUP2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyLEFT2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyRIGHT2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT1) || Phaser.Input.Keyboard.JustDown(keyLEFT2)) {
+        if (Phaser.Input.Keyboard.JustDown(keyUP1) || Phaser.Input.Keyboard.JustDown(keyUP2)) {
             // easy mode
             game.settings = {
                 spaceshipMaxSpeed: 5,
@@ -51,7 +56,7 @@ class Menu extends Phaser.Scene{
             }
             this.sound.play('sfx_select');
             this.scene.start('playScene');
-        }
+        } /*
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT1) || Phaser.Input.Keyboard.JustDown(keyRIGHT2)) {
             // hard mode
             game.settings = {
@@ -62,6 +67,6 @@ class Menu extends Phaser.Scene{
             }
             this.sound.play('sfx_select');
             this.scene.start('playScene');
-        }
+        } */
     }
 }

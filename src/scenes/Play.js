@@ -25,6 +25,12 @@ class Play extends Phaser.Scene{
             startFrame: 0,
             endFrame: 3
         });
+        this.load.spritesheet('hatAnim', './assets/hatAnim.png', {
+            frameWidth: 40,
+            frameHeight: 24,
+            startFrame: 0,
+            endFrame: 3
+        });
     }
 
     create() {
@@ -85,28 +91,14 @@ class Play extends Phaser.Scene{
 
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-        // animation config
-        this.anims.create({
-            key: 'manWalk',
-            frames: this.anims.generateFrameNumbers('playerAnim', {
-                start: 0,
-                end: 3,
-                first: 0
-            }),
-            frameRate: 5,
-            repeat: -1
-        });
 
         // instantiate Player1 class
         this.p1 = new Player(this, game.config.width/2, game.config.height - borderUISize - borderPadding + 8, 'playerAnim', 0, keyLEFT1, keyRIGHT1, this.p1Scoreboard).setOrigin(0.5, 1);
-        this.p1Rocket = new Rocket(this, game.config.width/3, game.config.height - borderUISize - borderPadding + 8 - this.p1.height, 'hat', 0, this.p1, keyUP1, false).setOrigin(0.5, 1);
+        this.p1Rocket = new Rocket(this, game.config.width/3, game.config.height - borderUISize - borderPadding + 8 - this.p1.height, 'hatAnim', 3, this.p1, keyUP1, false).setOrigin(0.5, 1);
 
         // instantiate Player2 class
         this.p2 = new Player(this, game.config.width/2, borderUISize + borderPadding - 8, 'playerAnim', 0, keyLEFT2, keyRIGHT2, this.p2Scoreboard).setOrigin(0.5, 0);
-        this.p2Rocket = new Rocket(this, game.config.width/2, borderUISize + borderPadding + this.p1.height - 8, 'hat', 0, this.p2, keyUP2, true).setOrigin(0.5, 0);
-
-        this.p1.anims.play('manWalk');
-        this.p2.anims.play('manWalk');
+        this.p2Rocket = new Rocket(this, game.config.width/2, borderUISize + borderPadding + this.p1.height - 8, 'hatAnim', 3, this.p2, keyUP2, true).setOrigin(0.5, 0);
 
         // add spaceship (x3)
         /*
@@ -149,6 +141,7 @@ class Play extends Phaser.Scene{
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ᐊ for Menu', scoreConfig).setOrigin(0.5);
             this.song.stop();
+            this.sound.play('sfx_over', {volume: 0.5});
             this.gameOver = true;
         }, null, this);
 
@@ -197,8 +190,8 @@ class Play extends Phaser.Scene{
         this.checkAllCollisions(this.p2Rocket);
 
         if(this.checkCollision(this.p1Rocket, this.p2Rocket)) {
-            this.p1Rocket.reset();
-            this.p2Rocket.reset();
+            this.p1Rocket.reset(true, false);
+            this.p2Rocket.reset(true, false);
             this.sfx_explosion.play();
         }
 
@@ -209,13 +202,13 @@ class Play extends Phaser.Scene{
     checkAllCollisions(rocket) {
         this.spaceships.forEach(ship => {
             if (this.checkCollision(rocket, ship) && ship.alpha != 0) {
-                rocket.reset();
+                rocket.reset(true, false);
                 this.shipExplode(ship, rocket);
             }
         });
         // "catch" the rocket with the ship
         if (this.checkCollision(rocket, rocket.player)){
-            rocket.reset();
+            rocket.reset(false, true);
         }
     }
 
@@ -261,7 +254,7 @@ class Play extends Phaser.Scene{
 
     rocketMissed(rocket) {
         rocket.isMissed = true;
-        this.time.delayedCall(game.settings.missTimer, ()=> rocket.reset(), null, this);
+        this.time.delayedCall(game.settings.missTimer, ()=> rocket.reset(true, true), null, this);
         this.sound.play('sfx_miss', {volume:0.1})
     }
 }

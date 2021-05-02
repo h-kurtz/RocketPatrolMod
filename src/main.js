@@ -41,4 +41,4 @@ let borderPadding = 8;
 let bgSpeed = 2;
 
 // reserve player 1 and 2 keyboard bindings
-let keyR, keyUP1, keyLEFT1, keyRIGHT1, keyUP2, keyLEFT2, keyRIGHT2;
+let keyR, keyUP1, keyLEFT1, keyRIGHT1, keyUP2, keyLEFT2, keyRIGHT2, keySPACE;

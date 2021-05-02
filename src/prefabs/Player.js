@@ -21,15 +21,30 @@ class Player extends Phaser.GameObjects.Sprite {
         this.scoreboard = scoreboard;
 
         this.sfxRocket = scene.sound.add('sfx_rocket'); // add rocket sfx
+
+        // animation config
+        this.anims.create({
+            key: 'manWalk',
+            frames: this.anims.generateFrameNumbers('playerAnim', {
+                start: 0,
+                end: 3,
+                first: 0
+            }),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.play('manWalk');
 	}
 
     update() {
 	    // left/right movement with acceleration
         if(this.keyLEFT.isDown && this.x >= 0 - this.width / 2 && this.moveSpeedX > -this.maxSpeed) {
             this.moveSpeedX -= this.acceleration;
+            this.anims.msPerFrame = 60;
         } 
         else if (this.keyRIGHT.isDown && this.x <= game.config.width + this.width / 2 && this.moveSpeedX < this.maxSpeed) {
             this.moveSpeedX += this.acceleration;
+            this.anims.msPerFrame = 60;
         } 
         else { // reduce speed with friction if not moving
             if (this.moveSpeedX > 0) {
@@ -38,6 +53,7 @@ class Player extends Phaser.GameObjects.Sprite {
             else if (this.moveSpeedX < 0) {
                 this.moveSpeedX += this.friction;
             }
+            this.anims.msPerFrame = 200;
         }
 
         // update position based on speed if over a threshold
