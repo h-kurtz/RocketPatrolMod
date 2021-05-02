@@ -10,6 +10,12 @@ class Menu extends Phaser.Scene{
         this.load.audio('sfx_catch', './assets/sfx_catch.wav');
         this.load.audio('sfx_over', './assets/sfx_over.wav')
         this.load.audio('music', './assets/music.mp3');
+        this.load.audio('drone', './assets/drone.mp3');
+
+        this.load.image('bg1', './assets/bg1.png');
+        this.load.image('bg2', './assets/bg2.png');
+        this.load.image('streetlamps', './assets/streetlamps.png');
+        this.load.image('road', './assets/road.png');
     }
 
     create() {
@@ -26,15 +32,23 @@ class Menu extends Phaser.Scene{
             },
             fixedWidth: 0
         }
+
+        //this.bgLayer2 = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'bg2').setOrigin(0, 1);
+        this.bgLayer1 = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'bg1').setOrigin(0, 1);
+
+        this.bgLamps = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'streetlamps').setOrigin(0, 1);
+        this.bgRoad = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'road').setOrigin(0, 1);
+
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2 - (borderUISize * 2), 'HAT PATROL', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - (borderUISize * 4), 'HAT PATROL', menuConfig).setOrigin(0.5);
         menuConfig.fontSize = '20px';
         this.add.text(game.config.width/2, game.config.height/2, 'Player 1: use A & D to move & W to launch', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize, 'Player 2: use ᐊ ᐅ arrows to move & ᐃ to launch', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 2 + borderPadding, 'Hold to launch higher!', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#A080EC';
         menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 3 + borderPadding * 2, 'Press W or ᐃ to begin...', menuConfig).setOrigin(0.5);
+        menuConfig.fontSize = '24px';
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize * 4 + borderPadding * 2, 'Press W or ᐃ to begin...', menuConfig).setOrigin(0.5);
 
         // define keys
         keyUP1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -43,9 +57,17 @@ class Menu extends Phaser.Scene{
         keyUP2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyLEFT2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyRIGHT2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+        this.drone = this.sound.add('drone', {volume: 0.25, loop: true});
+        this.drone.play();
     }
 
     update() {
+        this.bgRoad.tilePositionX  -= bgSpeed * 0.5;
+        this.bgLamps.tilePositionX  -= bgSpeed * 0.4;
+        this.bgLayer1.tilePositionX -= bgSpeed * 0.3;
+        //this.bgLayer2.tilePositionX -= bgSpeed * 0.2;
+
         if (Phaser.Input.Keyboard.JustDown(keyUP1) || Phaser.Input.Keyboard.JustDown(keyUP2)) {
             // easy mode
             game.settings = {
@@ -54,6 +76,7 @@ class Menu extends Phaser.Scene{
                 gameTimer: 60000,
                 missTimer: 3000
             }
+            this.drone.stop();
             this.sound.play('sfx_select');
             this.scene.start('playScene');
         } /*

@@ -8,10 +8,7 @@ class Play extends Phaser.Scene{
         this.load.image('hat', './assets/hat.png');
         this.load.image('player', './assets/man.png');
         this.load.image('bottle', './assets/bottle.png');
-        this.load.image('bg1', './assets/bg1.png');
-        this.load.image('bg2', './assets/bg2.png');
-        this.load.image('streetlamps', './assets/streetlamps.png');
-        this.load.image('road', './assets/road.png');
+
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {
             frameWidth: 70,
