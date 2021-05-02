@@ -76,9 +76,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
 		this.isMissed = false;
 		this.moveSpeedX = 0;
 		if (this.inverted) {
-			this.y = borderPadding + borderUISize + this.player.height;
+			this.y = borderPadding + borderUISize + this.player.height - 8;
 		} else {
-			this.y = game.config.height - borderUISize - borderPadding - this.player.height;
+			this.y = game.config.height - borderUISize - borderPadding - this.player.height + 8;
 		}
+		this.x = this.player.x;
 	}
 }

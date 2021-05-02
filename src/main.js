@@ -31,7 +31,7 @@ Total:                                          100pts
 let config = {
     type: Phaser.CANVAS,
     width: 640,
-    height: 640,
+    height: 800,
     scene: [ Menu, Play ]
 }
 let game = new Phaser.Game(config);

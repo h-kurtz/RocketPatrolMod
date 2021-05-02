@@ -14,10 +14,16 @@ class Play extends Phaser.Scene{
         this.load.image('road', './assets/road.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {
-            frameWidth: 64,
-            frameHeight: 32,
+            frameWidth: 70,
+            frameHeight: 48,
             startFrame: 0,
-            endFrame: 9
+            endFrame: 4
+        });
+        this.load.spritesheet('playerAnim', './assets/manAnim.png', {
+            frameWidth: 32,
+            frameHeight: 48,
+            startFrame: 0,
+            endFrame: 3
         });
     }
 
@@ -26,15 +32,15 @@ class Play extends Phaser.Scene{
         this.add.rectangle(0, 0, game.config.width, game.config.height, 0x7860B1).setOrigin(0, 0);
 
         // place background
-    	this.bgLayer2 = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg2').setOrigin(0, 0);
-        this.bgLayer1 = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg1').setOrigin(0, 0);
-        this.bgLamps = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'streetlamps').setOrigin(0, 0);
-        this.bgRoad = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'road').setOrigin(0, 0);
+    	this.bgLayer2 = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'bg2').setOrigin(0, 1);
+        this.bgLayer1 = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'bg1').setOrigin(0, 1);
+        this.bgLamps = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'streetlamps').setOrigin(0, 1);
+        this.bgRoad = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'road').setOrigin(0, 1);
 
-        this.bgLayer2b = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg2').setOrigin(0, 0);
-        this.bgLayer1b = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'bg1').setOrigin(0, 0);
-        this.bgLampsb = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'streetlamps').setOrigin(0, 0);
-        this.bgRoadb = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'road').setOrigin(0, 0);
+        this.bgLayer2b = this.add.tileSprite(0, -160, game.config.width, game.config.height, 'bg2').setOrigin(0, 0);
+        this.bgLayer1b = this.add.tileSprite(0, -160, game.config.width, game.config.height, 'bg1').setOrigin(0, 0);
+        this.bgLampsb = this.add.tileSprite(0, -160, game.config.width, game.config.height, 'streetlamps').setOrigin(0, 0);
+        this.bgRoadb = this.add.tileSprite(0, -160, game.config.width, game.config.height, 'road').setOrigin(0, 0);
 
         this.bgLayer2b.flipY = true;
         this.bgLayer1b.flipY = true;
@@ -63,7 +69,7 @@ class Play extends Phaser.Scene{
         }
         
         // display scoreboards
-        this.p1Scoreboard = this.add.text(game.config.height, game.config.height, 0, scoreConfig).setOrigin(1);
+        this.p1Scoreboard = this.add.text(game.config.width, game.config.height, 0, scoreConfig).setOrigin(1);
         this.p2Scoreboard = this.add.text(0, 0, 0, scoreConfig);
         
 
@@ -79,13 +85,28 @@ class Play extends Phaser.Scene{
 
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
+        // animation config
+        this.anims.create({
+            key: 'manWalk',
+            frames: this.anims.generateFrameNumbers('playerAnim', {
+                start: 0,
+                end: 3,
+                first: 0
+            }),
+            frameRate: 5,
+            repeat: -1
+        });
+
         // instantiate Player1 class
-        this.p1 = new Player(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'player', 0, keyLEFT1, keyRIGHT1, this.p1Scoreboard).setOrigin(0.5, 1);
-        this.p1Rocket = new Rocket(this, game.config.width/3, game.config.height - borderUISize - borderPadding - this.p1.height, 'hat', 0, this.p1, keyUP1, false).setOrigin(0.5, 1);
+        this.p1 = new Player(this, game.config.width/2, game.config.height - borderUISize - borderPadding + 8, 'playerAnim', 0, keyLEFT1, keyRIGHT1, this.p1Scoreboard).setOrigin(0.5, 1);
+        this.p1Rocket = new Rocket(this, game.config.width/3, game.config.height - borderUISize - borderPadding + 8 - this.p1.height, 'hat', 0, this.p1, keyUP1, false).setOrigin(0.5, 1);
 
         // instantiate Player2 class
-        this.p2 = new Player(this, game.config.width/2, borderUISize + borderPadding, 'player', 0, keyLEFT2, keyRIGHT2, this.p2Scoreboard).setOrigin(0.5, 0);
-        this.p2Rocket = new Rocket(this, game.config.width/2, borderUISize + borderPadding + this.p1.height, 'hat', 0, this.p2, keyUP2, true).setOrigin(0.5, 0);
+        this.p2 = new Player(this, game.config.width/2, borderUISize + borderPadding - 8, 'playerAnim', 0, keyLEFT2, keyRIGHT2, this.p2Scoreboard).setOrigin(0.5, 0);
+        this.p2Rocket = new Rocket(this, game.config.width/2, borderUISize + borderPadding + this.p1.height - 8, 'hat', 0, this.p2, keyUP2, true).setOrigin(0.5, 0);
+
+        this.p1.anims.play('manWalk');
+        this.p2.anims.play('manWalk');
 
         // add spaceship (x3)
         /*
@@ -97,7 +118,7 @@ class Play extends Phaser.Scene{
 
         this.spaceships = [game.settings.spaceshipAmount];
         for (let i = 0; i < game.settings.spaceshipAmount; i++) {
-            this.spaceships[i] = new Spaceship(this, game.config.width, game.config.height/2 + (borderPadding * (((2 * (i % 2)) - 1) * (i * 2))), 
+            this.spaceships[i] = new Spaceship(this, game.config.width, game.config.height/2 + (borderPadding * (((2 * (i % 2)) - 1) * (i * 4))), 
             'bottle', 0, 30).setOrigin(0, 0);
         }
 
@@ -106,14 +127,18 @@ class Play extends Phaser.Scene{
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', {
                 start: 0,
-                end: 9,
+                end: 4,
                 first: 0
             }),
-            frameRate: 30
+            frameRate: 20
         });
 
         this.song = this.sound.add('music', {volume: 0.5, loop: true});
         this.song.play();
+
+        this.sfx_explosion = this.sound.add('sfx_explosion');
+        this.sfx_explosion.setRate(2);
+        this.sfx_explosion.setVolume(0.25);
 
         // GAME OVER flag
         this.gameOver = false;
@@ -137,11 +162,11 @@ class Play extends Phaser.Scene{
     update() {
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.sound.play('sfx_select', {volume:0.5});
+            this.sound.play('sfx_select', {volume:0.25});
             this.scene.restart();
         }
         if (this.gameOver && (Phaser.Input.Keyboard.JustDown(keyLEFT1) || Phaser.Input.Keyboard.JustDown(keyLEFT2))) {
-            this.sound.play('sfx_select', {volume:0.5});
+            this.sound.play('sfx_select', {volume:0.25});
             this.scene.start('menuScene');
         }
 
@@ -174,7 +199,7 @@ class Play extends Phaser.Scene{
         if(this.checkCollision(this.p1Rocket, this.p2Rocket)) {
             this.p1Rocket.reset();
             this.p2Rocket.reset();
-            this.sound.play('sfx_explosion', {volume:0.5});
+            this.sfx_explosion.play();
         }
 
         this.checkMiss(this.p1Rocket);
@@ -217,7 +242,10 @@ class Play extends Phaser.Scene{
         // temporarily hide ship
         ship.alpha = 0;
         // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+        let boom = this.add.sprite(ship.x - 4, ship.y - 4, 'explosion').setOrigin(0, 0);
+        if (!ship.dirLeft) {
+            boom.flipX = true;
+        }
         boom.anims.play('explode');             //play explode animation
         boom.on('animationcomplete', () => {    // callback after ani completes
             ship.reset();       // reset ship position
@@ -227,13 +255,13 @@ class Play extends Phaser.Scene{
         // score add and repaint
         rocket.player.score += ship.points;
         rocket.player.scoreboard.text = rocket.player.score;
-        this.sound.play('sfx_explosion', {volume:0.5});
+        this.sfx_explosion.play();
     }
 
 
     rocketMissed(rocket) {
         rocket.isMissed = true;
         this.time.delayedCall(game.settings.missTimer, ()=> rocket.reset(), null, this);
-        this.sound.play('sfx_miss', {volume:0.25})
+        this.sound.play('sfx_miss', {volume:0.1})
     }
 }
