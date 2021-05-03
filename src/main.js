@@ -28,7 +28,8 @@ let config = {
     type: Phaser.WEBGL,
     width: 640,
     height: 800,
-    scene: [ Menu, Play ]
+    scene: [ Menu, Play ],
+    autoCenter: true,
 }
 let game = new Phaser.Game(config);
 

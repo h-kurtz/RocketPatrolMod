@@ -237,7 +237,7 @@ class Play extends Phaser.Scene{
 
     checkMiss(rocket) {
         // call miss timer, if it touches the ground or the sky
-		if ((rocket.y <= borderUISize || rocket.y >= game.config.height - borderUISize - borderPadding) && !rocket.isMissed) {
+		if ((rocket.y <= 0 || rocket.y >= game.config.height) && !rocket.isMissed) {
 			this.rocketMissed(rocket);
 		}
     }
