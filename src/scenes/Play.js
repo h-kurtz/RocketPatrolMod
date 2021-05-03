@@ -138,6 +138,8 @@ class Play extends Phaser.Scene{
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ᐊ for Menu', scoreConfig).setOrigin(0.5);
             this.song.stop();
+            this.p1.anims.stop();
+            this.p2.anims.stop();
             this.sound.play('sfx_over', {volume: 0.5});
             this.gameOver = true;
         }, null, this);
