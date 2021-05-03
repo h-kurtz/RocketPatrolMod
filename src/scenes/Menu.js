@@ -87,7 +87,7 @@ class Menu extends Phaser.Scene{
             // easy mode
             game.settings = {
                 spaceshipMaxSpeed: 5,
-                spaceshipAmount: 5,
+                spaceshipAmount: 4,
                 gameTimer: 60000,
                 missTimer: 3000
             }

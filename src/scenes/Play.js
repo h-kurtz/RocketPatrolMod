@@ -113,7 +113,7 @@ class Play extends Phaser.Scene{
 
         this.spaceships = [game.settings.spaceshipAmount];
         for (let i = 0; i < game.settings.spaceshipAmount; i++) {
-            this.spaceships[i] = new Spaceship(this, game.config.width, game.config.height/2 + (borderPadding * (((2 * (i % 2)) - 1) * (i * 4))), 
+            this.spaceships[i] = new Spaceship(this, game.config.width, game.config.height/2 + (borderPadding * (((2 * ((i) % 2)) - 1) * (i * 4))), 
             'bottle', 0, 10).setOrigin(0.5);
         }
 
