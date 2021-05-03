@@ -9,11 +9,7 @@ SCORE BREAKDOWN:
 Simultaneous two-player gameplay:               30pts
 Display remaining time:                         10pts
 Randomize enemy movement direction:             5 pts
-Create new artwork for in game assets:          20pts
-    * Did not create new explosion asset,
-      I attempted to get the particle system
-      working, but there isn't great 
-      documentation for that.
+Redid all the in-game assets for a new theme:   60pts
 Implement parallax scrolling:                   10pts
 Wrote and implemented simple background music:  5pts
 Create and implement a new weapon:              20pts
@@ -24,12 +20,12 @@ Create and implement a new weapon:              20pts
     * Player can "catch" the hat/rocket to
       get it back instantly, or miss and have
       to wait a short amount of time.
-Total:                                          100pts
+Total:                                          140pts
 */
 
 // game configuration
 let config = {
-    type: Phaser.CANVAS,
+    type: Phaser.WEBGL,
     width: 640,
     height: 800,
     scene: [ Menu, Play ]

@@ -31,8 +31,14 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-        // red bg
+        // color background
         this.add.rectangle(0, 0, game.config.width, game.config.height, 0x7860B1).setOrigin(0, 0);
+
+    /*  let graphics = this.add.graphics();
+        graphics.fillGradientStyle(0x7860B1, 0x7860B1, 0x4B3C6F, 0x4B3C6F, 1);
+        graphics.fillRect(0, 0, 640, 400);
+        graphics.fillGradientStyle(0x4B3C6F, 0x4B3C6F, 0x7860B1, 0x7860B1, 1);
+        graphics.fillRect(0, 400, 640, 800); */
 
         // place background
     	this.bgLayer2 = this.add.tileSprite(0, game.config.height + 160, game.config.width, game.config.height, 'bg2').setOrigin(0, 1);
@@ -108,7 +114,7 @@ class Play extends Phaser.Scene{
         this.spaceships = [game.settings.spaceshipAmount];
         for (let i = 0; i < game.settings.spaceshipAmount; i++) {
             this.spaceships[i] = new Spaceship(this, game.config.width, game.config.height/2 + (borderPadding * (((2 * (i % 2)) - 1) * (i * 4))), 
-            'bottle', 0, 30).setOrigin(0, 0);
+            'bottle', 0, 30).setOrigin(0.5);
         }
 
         // animation config
@@ -149,6 +155,12 @@ class Play extends Phaser.Scene{
 
         // visual timer
         this.visTimer = this.add.text(game.config.width, 0, this.timerSeconds, scoreConfig).setOrigin(1,0);
+
+        this.cameras.main.fadeIn(500); 
+
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+            this.scene.start('menuScene');
+        });
     }
 
     update() {
@@ -159,7 +171,7 @@ class Play extends Phaser.Scene{
         }
         if (this.gameOver && (Phaser.Input.Keyboard.JustDown(keyLEFT1) || Phaser.Input.Keyboard.JustDown(keyLEFT2))) {
             this.sound.play('sfx_select', {volume:0.25});
-            this.scene.start('menuScene');
+            this.cameras.main.fadeOut(1000);
         }
 
         if (!this.gameOver) {
@@ -213,10 +225,10 @@ class Play extends Phaser.Scene{
 
     checkCollision(a, b) {
         // simple AABB checking
-        if (a.x < b.x + b.width &&
-            a.x + a.width > b.x &&
-            a.y < b.y + b.height &&
-            a.height + a.y > b.y) {
+        if (a.x - a.width/2 < b.x + b.width/2 &&
+            a.x + a.width/2 > b.x - b.width/2 &&
+            a.y - a.height/2 < b.y + b.height/2 &&
+            a.height/2 + a.y > b.y - b.height/2) {
                 return true;
             } else {
                 return false;
@@ -234,7 +246,7 @@ class Play extends Phaser.Scene{
         // temporarily hide ship
         ship.alpha = 0;
         // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x - 4, ship.y - 4, 'explosion').setOrigin(0, 0);
+        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0.5);
         if (!ship.dirLeft) {
             boom.flipX = true;
         }
